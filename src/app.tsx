@@ -1,43 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { render } from 'react-dom';
-import { useSpring, animated, useTransition } from 'react-spring';
+import { animated, useSpring, useTransition } from 'react-spring';
 import styled, { createGlobalStyle } from 'styled-components';
 import { Logo } from './Logo';
 import { NameTag } from './NameTag';
+import { UserBar } from './UserBar';
 
 const Global = createGlobalStyle`
   body {
+    background: #000;
     margin: 0;
     font: 12px Avenir;
   }
 `;
 
-const Container = styled.div``;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+`;
 
 const Bar = styled(animated.div)`
   position: fixed;
-  left: 0;
+  right: 0;
   bottom: 0;
-  width: 100vw;
+  left: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 2em;
-
+  padding: 1em;
   box-sizing: border-box;
   background: linear-gradient(#0000, #0006);
 `;
 
 const Centered = styled.div`
+  position: relative;
   display: flex;
-  flex: 1;
+  flex: 0 0 auto;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  margin: 2em;
+  padding: 1em;
+  padding-inline-end: 4em;
 `;
 
-const Dancing = animated(Logo);
+const Dancing = styled(animated(Logo))`
+  margin-inline-end: 4em;
+`;
 
 const F = styled(animated.div)`
   flex: 1;
@@ -69,6 +80,15 @@ const Tx = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+const PillBackground = styled(UserBar)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+`;
+
 const App = () => {
   const props: any = useSpring({
     config: { friction: 5, tension: 4 },
@@ -83,16 +103,18 @@ const App = () => {
   return (
     <Container>
       <Global />
+
       <Bar>
         <Centered>
-          <Dancing size={160} logoColor={props.color} />
+          <Dancing size={120} logoColor={props.color} />
           <Tx>
             <NameTag
               textColor="#000C"
-              name="Beau Collins"
-              title="Director of Merges"
+              name="Robert Hale Collins III"
+              title="Director of Merge Conflicts"
             />
           </Tx>
+          <PillBackground fill="#fffc" />
         </Centered>
       </Bar>
     </Container>

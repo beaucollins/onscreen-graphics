@@ -1,13 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import Shape from './Shape';
+import { UserBar } from './UserBar';
 
-const Flex = styled.div<{ mode: 'row' | 'column' }>`
+const Flex = styled.div<{ mode: 'row' | 'column'; maxWidth?: string }>`
   position: relative;
   display: flex;
   flex: 1;
+  max-width: ${({ maxWidth }) => (maxWidth == null ? 'auto' : maxWidth)};
   flex-direction: ${({ mode }) => mode};
-  padding: 1rem;
+  justify-content: center;
 `;
 
 const Text = styled.div<{ textColor: string }>`
@@ -35,6 +37,7 @@ const AngleBackground = styled(Shape)`
   bottom: 0;
   left: 0;
 `;
+
 export const NameTag = ({
   name,
   title,
@@ -45,7 +48,6 @@ export const NameTag = ({
   textColor?: string;
 }) => (
   <Flex mode="column">
-    <AngleBackground scope={0.4} />
     <Name textColor={textColor}>{name}</Name>
     <Title textColor={textColor}>{title}</Title>
   </Flex>

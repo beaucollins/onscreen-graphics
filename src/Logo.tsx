@@ -11,7 +11,13 @@ export function Logo({
 }) {
   return (
     <div className={className}>
-      <svg width={size} height={size} viewBox="-50 -50 100 100" fill="none">
+      <svg
+        style={{ display: 'block' }}
+        width={size}
+        height={size}
+        viewBox="-50 -50 100 100"
+        fill="none"
+      >
         <circle r="50%" fill="#DD4A40"></circle>
         <g fill={logoColor} transform="scale(0.6 0.6), translate(-50, -50)">
           <path
