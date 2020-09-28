@@ -10,14 +10,18 @@ const Flex = styled.div<{ mode: 'row' | 'column'; maxWidth?: string }>`
   max-width: ${({ maxWidth }) => (maxWidth == null ? 'auto' : maxWidth)};
   flex-direction: ${({ mode }) => mode};
   justify-content: center;
+  overflow: hidden;
 `;
 
 const Text = styled.div<{ textColor: string }>`
+  overflow: hidden;
   z-index: 2;
   position: relative;
-  text-align: right;
+  text-align: left;
   color: ${({ textColor }) => textColor};
   margin-inline-end: 1rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const Name = styled(Text)`

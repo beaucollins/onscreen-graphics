@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 
 export function Logo({
   logoColor = '#0003',
   size = 100,
   className,
+  style,
 }: {
   logoColor?: string;
   size?: number;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   return (
-    <div className={className}>
+    <div className={className} style={style}>
       <svg
         style={{ display: 'block' }}
         width={size}

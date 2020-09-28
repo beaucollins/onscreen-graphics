@@ -1,9 +1,12 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 import useWindowSize from './useWindowSize';
 
-type Size = [width: number, height: number];
+export type Size = [width: number, height: number];
 
-function useElementSize<T extends HTMLElement>(): [RefObject<T>, Size] {
+const noDependents: Array<unknown> = [];
+function useElementSize<T extends HTMLElement>(
+  dependents: Array<unknown> = noDependents
+): [RefObject<T>, Size] {
   const ref = useRef<T>(null);
   const [size, setSize] = useState<Size>([0, 0]);
   const updateSize = () => {
@@ -17,16 +20,16 @@ function useElementSize<T extends HTMLElement>(): [RefObject<T>, Size] {
         : next;
     });
   };
-  useEffect(() => updateSize());
+  useEffect(() => updateSize(), dependents);
   useWindowSize(() => updateSize());
   return [ref, size];
 }
 
-type Vector = [magnitude: number, direction: number];
-type Point = [x: number, y: number];
-type Path = Vector[];
+export type Vector = [magnitude: number, direction: number];
+export type Point = [x: number, y: number];
+export type Path = Vector[];
 
-function vectorToCartesian([magnitude, direction]: Vector): Point {
+export function vectorToCartesian([magnitude, direction]: Vector): Point {
   return [
     Math.cos(direction * (Math.PI / 180)) * magnitude,
     Math.sin(direction * (Math.PI / 180)) * magnitude,
@@ -45,7 +48,7 @@ function compose<A, B, C>(fn1: (a: A) => B, fn2: (b: B) => C): (a: A) => C {
   return (a) => fn2(fn1(a));
 }
 
-function createPath(path: Path): string {
+export function createPath(path: Path): string {
   const [initial, ...rest] = path;
   return (
     rest.reduce(
@@ -75,20 +78,23 @@ export const UserBar2 = () => {
 export const UserBar = ({
   fill = '#fffc',
   className,
+  width,
 }: {
   fill?: string;
   className?: string;
+  width?: string;
 }) => {
-  const [ref, [width, height]] = useElementSize<HTMLDivElement>();
+  const [ref, [elementWidth, height]] = useElementSize<HTMLDivElement>([width]);
+  const w = Math.max(height, elementWidth);
   return (
     <div ref={ref} className={className}>
       <svg style={{ display: 'block' }} height="100%" width="100%">
         <path
-          d={`M${height * 0.5},0 l${width - height},0 a ${height * 0.5} ${
+          d={`M${height * 0.5},0 l${w - height},0 a ${height * 0.5} ${
             height * 0.5
-          } 180 1 1 0,${height} l${-(width - height)},0 a ${height * 0.5} ${
+          } 0 0 1 0,${height} l${-(w - height)},0 a ${height * 0.5} ${
             height * 0.5
-          } 180 1 1 0,${-height}`}
+          } 0 0 1 0,${-height}`}
           fill={fill}
         />
       </svg>
