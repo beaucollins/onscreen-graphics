@@ -220,7 +220,9 @@ function demo(push: (value: string) => void) {
 
 if (require.main) {
   function withConnection(update: (value: string) => void) {
-    const socket = new WebSocket(`ws://${location.host}`);
+    const socket = new WebSocket(
+      `${location.protocol === 'https' ? 'wss' : 'ws'}://${location.host}`
+    );
     socket.addEventListener('message', (event) => {
       update(event.data);
     });
@@ -228,7 +230,6 @@ if (require.main) {
       withConnection(update);
     });
     (global as any).sendTitle = (value: string) => {
-      console.log('send');
       socket.send(value);
     };
   }

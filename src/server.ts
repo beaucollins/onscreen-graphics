@@ -4,15 +4,26 @@ import express from 'express';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import ws from 'ws';
 import morgan from 'morgan';
+import bodyParser from 'body-parser';
+
+const listeners: Set<ws> = new Set();
+
+const notify = (title: string) => {
+  for (const listener of listeners) {
+    listener.send(title);
+  }
+};
 
 const server = express()
-  .use(morgan('common'))
+  .use(morgan('combined'))
   .use(webpackDevMiddleware(webpack(config)))
+  .post('/', bodyParser.json(), (req, res) => {
+    notify(req.body.title);
+    res.status(200).json({ updated: req.body.title });
+  })
   .listen(3000);
 
 const sockets = new ws.Server({ server });
-
-const listeners: Set<ws> = new Set();
 
 sockets.on('connection', (socket) => {
   console.log('connected');
@@ -23,11 +34,7 @@ sockets.on('connection', (socket) => {
   socket.on('message', (message) => {
     try {
       if (typeof message === 'string') {
-        // const value = JSON.parse(message);
-        // console.log('received', value);
-        for (const listener of listeners) {
-          listener.send(message);
-        }
+        notify(message);
       } else {
         throw new Error('not understood');
       }

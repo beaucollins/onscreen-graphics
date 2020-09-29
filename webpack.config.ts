@@ -5,7 +5,8 @@ import { Configuration } from 'webpack';
 const config: Configuration = {
   mode: 'development',
   entry: {
-    main: './src/app.tsx',
+    graphics: './src/App.tsx',
+    submit: './src/Submit.tsx',
   },
   output: {
     path: resolve(__dirname, '../dist/public'),
@@ -25,7 +26,17 @@ const config: Configuration = {
       },
     ],
   },
-  plugins: [new HtmlWebpackPlugin()],
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Graphics',
+      chunks: ['graphics'],
+      filename: 'graphics/index.html',
+    }),
+    new HtmlWebpackPlugin({
+      title: 'Submit Title',
+      chunks: ['submit'],
+    }),
+  ],
 };
 
 export default config;
