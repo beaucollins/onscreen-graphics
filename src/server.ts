@@ -4,7 +4,7 @@ import express from 'express';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import ws from 'ws';
 import morgan from 'morgan';
-import bodyParser from 'body-parser';
+import { json } from 'body-parser';
 
 const listeners: Set<ws> = new Set();
 
@@ -17,7 +17,7 @@ const notify = (title: string) => {
 const server = express()
   .use(morgan('combined'))
   .use(webpackDevMiddleware(webpack(config)))
-  .post('/', bodyParser.json(), (req, res) => {
+  .post('/', json(), (req, res) => {
     notify(req.body.title);
     res.status(200).json({ updated: req.body.title });
   })
