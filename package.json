@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node -r ./register src/server.ts",
+    "deploy": "VERSION=`git describe --always`; docker build . --tag coplusco/osg:$VERSION --platform linux/amd64 && docker tag coplusco/osg:$VERSION coplusco/osg:latest && docker push coplusco/osg:latest && docker push coplusco/osg:$VERSION && kubectl --namespace=common-room rollout restart deploy/osg",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
