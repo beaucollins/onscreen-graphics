@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { render } from 'react-dom';
+import React, { StrictMode, useEffect, useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import { animated, useTransition } from 'react-spring';
 import styled, { createGlobalStyle } from 'styled-components';
 import { Logo } from './Logo';
 import { NameTag } from './NameTag';
-import { UserBar, createPath, Vector, Path, Size } from './UserBar';
+import { Path, Size } from './UserBar';
 
 const Global = createGlobalStyle`
   body {
@@ -163,7 +163,7 @@ const App = ({ createListener, name = 'Roomie McRoomerson' }: Props) => {
 if (require.main) {
   function withConnection(update: (value: string) => void) {
     const socket = new WebSocket(
-      `${location.protocol === 'https' ? 'wss' : 'ws'}://${location.host}`
+      `${location.protocol === 'https:' ? 'wss' : 'ws'}://${location.host}`
     );
     socket.addEventListener('message', (event) => {
       update(event.data);
@@ -178,13 +178,15 @@ if (require.main) {
   const node = document.createElement('div');
   document.body.appendChild(node);
   const query = new URLSearchParams(location.search);
-  render(
-    <App
-      createListener={(update) => {
-        withConnection(update);
-      }}
-      name={query.get('name') ?? undefined}
-    />,
-    node
+  const root = createRoot(node);
+  root.render(
+    <StrictMode>
+      <App
+        createListener={(update) => {
+          withConnection(update);
+        }}
+        name={query.get('name') ?? undefined}
+      />
+    </StrictMode>
   );
 }

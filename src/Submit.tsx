@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { render } from 'react-dom';
+import React, { useCallback, useState, StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import styled, { createGlobalStyle } from 'styled-components';
 
 const Global = createGlobalStyle`
@@ -70,19 +70,21 @@ const App = ({ onSubmitTitle }: { onSubmitTitle: (title: string) => void }) => {
 if (require.main) {
   const node = document.createElement('div');
   document.body?.appendChild(node);
-  render(
-    <App
-      onSubmitTitle={(title) => {
-        fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title }),
-        }).then(
-          () => console.log('success'),
-          (error) => console.error('failure', error)
-        );
-      }}
-    />,
-    node
+  const root = createRoot(node);
+  root.render(
+    <StrictMode>
+      <App
+        onSubmitTitle={(title) => {
+          fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title }),
+          }).then(
+            () => console.log('success'),
+            (error) => console.error('failure', error)
+          );
+        }}
+      />
+    </StrictMode>
   );
 }
