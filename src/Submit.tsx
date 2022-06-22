@@ -1,5 +1,5 @@
 import React, { useCallback, useState, StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+import { render } from 'react-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 
 const Global = createGlobalStyle`
@@ -70,8 +70,7 @@ const App = ({ onSubmitTitle }: { onSubmitTitle: (title: string) => void }) => {
 if (require.main) {
   const node = document.createElement('div');
   document.body?.appendChild(node);
-  const root = createRoot(node);
-  root.render(
+  render(
     <StrictMode>
       <App
         onSubmitTitle={(title) => {
@@ -85,6 +84,7 @@ if (require.main) {
           );
         }}
       />
-    </StrictMode>
+    </StrictMode>,
+    node
   );
 }

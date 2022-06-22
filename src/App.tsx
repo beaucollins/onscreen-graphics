@@ -1,5 +1,5 @@
 import React, { StrictMode, useEffect, useState } from 'react';
-import { createRoot } from 'react-dom/client';
+import { render } from 'react-dom';
 import { animated, useTransition } from 'react-spring';
 import styled, { createGlobalStyle } from 'styled-components';
 import { Logo } from './Logo';
@@ -178,8 +178,8 @@ if (require.main) {
   const node = document.createElement('div');
   document.body.appendChild(node);
   const query = new URLSearchParams(location.search);
-  const root = createRoot(node);
-  root.render(
+
+  render(
     <StrictMode>
       <App
         createListener={(update) => {
@@ -187,6 +187,7 @@ if (require.main) {
         }}
         name={query.get('name') ?? undefined}
       />
-    </StrictMode>
+    </StrictMode>,
+    node
   );
 }
