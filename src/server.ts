@@ -1,10 +1,11 @@
 import config from '../webpack.config';
 import webpack from 'webpack';
-import express from 'express';
+import express, { static as serveStatic } from 'express';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import ws from 'ws';
 import morgan from 'morgan';
 import { json } from 'body-parser';
+import { resolve } from 'path';
 
 const listeners: Set<ws> = new Set();
 
@@ -14,9 +15,21 @@ const notify = (title: string) => {
   }
 };
 
-const server = express()
-  .use(morgan('combined'))
-  .use(webpackDevMiddleware(webpack(config)))
+let app = express().use(morgan('combined'));
+
+const env = process.env.NODE_ENV ?? 'development';
+const publicDir = resolve(__dirname, '../dist/public');
+
+process.stderr.write(
+  'Running in NODE_ENV ' + env + ' serving from ' + publicDir + '\n'
+);
+
+app =
+  env === 'development' ? app.use(webpackDevMiddleware(webpack(config))) : app;
+
+app = env === 'production' ? app.use(serveStatic(publicDir)) : app;
+
+const server = app
   .post('/', json(), (req, res) => {
     notify(req.body.title);
     res.status(200).json({ updated: req.body.title });

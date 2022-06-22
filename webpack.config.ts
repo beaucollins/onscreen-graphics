@@ -4,12 +4,13 @@ import { Configuration } from 'webpack';
 
 const config: Configuration = {
   mode: 'development',
+  devtool: 'source-map',
   entry: {
     graphics: './src/App.tsx',
     submit: './src/Submit.tsx',
   },
   output: {
-    path: resolve(__dirname, '../dist/public'),
+    path: resolve(__dirname, './dist/public'),
     filename: '[name].bundle.js',
     chunkFilename: '[name].bundle.js',
     publicPath: '/',
