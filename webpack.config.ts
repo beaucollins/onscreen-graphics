@@ -23,7 +23,7 @@ const config: Configuration = {
       {
         test: /\.(j|t)sx?$/,
         exclude: /\/node_modules\//,
-        loader: 'babel-loader',
+        loader: 'swc-loader',
       },
     ],
   },
