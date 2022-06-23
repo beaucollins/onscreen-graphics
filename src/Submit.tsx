@@ -4,7 +4,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 
 const Global = createGlobalStyle`
   body {
-    font-family: Avenir, Helvetica Neue, Helvetica, Arial, Helvetica, sans-serif;
+    font-family: Avenir, Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size: 18px;
     background: #fcfcfc;
   }

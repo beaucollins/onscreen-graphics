@@ -10,7 +10,7 @@ const Global = createGlobalStyle`
   body {
     background: #000;
     margin: 0;
-    font: 12px Avenir;
+    font: 12px Avenir, Helvetica, sans-serif;
   }
 `;
 
